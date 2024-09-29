@@ -2,7 +2,7 @@ import os
 
 # Function to check if the file is a relevant one (Kotlin, Java, Gradle files)
 def is_relevant_file(filename):
-    return filename.endswith((".kt", "build.gradle", "build.gradle.kts", "settings.gradle", "settings.gradle.kts", "AndroidManifest.xml"))
+    return filename.endswith((".kt"))
 
 # Function to recursively collect the content of relevant files
 def collect_relevant_files_content(root_dir):
@@ -15,7 +15,7 @@ def collect_relevant_files_content(root_dir):
                 file_path = os.path.join(root, file)
                 with open(file_path, 'r', encoding='utf-8') as f:
                     file_content = f.read()
-                    project_files.append(f"File: {file_path}\n\n{file_content}\n{'=' * 80}\n\n")
+                    project_files.append(f"File: {file_path}\n\n{file_content}\n\n")
     
     return project_files
 

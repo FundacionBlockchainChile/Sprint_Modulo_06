@@ -4,8 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.contactapp.view.HomeView
 import com.example.contactapp.view.AddContactView
+import com.example.contactapp.view.EditContactView
+import com.example.contactapp.view.HomeView
 import com.example.contactapp.viewModel.ContactViewModel
 
 @Composable
@@ -17,6 +18,10 @@ fun NavManager(viewModel: ContactViewModel) {
         }
         composable("AddContactView") {
             AddContactView(navController, viewModel)
+        }
+        composable("EditContactView/{contactId}") { backStackEntry ->
+            val contactId = backStackEntry.arguments?.getString("contactId")?.toLong() ?: 0L
+            EditContactView(navController, viewModel, contactId)
         }
     }
 }

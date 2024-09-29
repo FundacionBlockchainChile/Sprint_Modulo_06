@@ -1,409 +1,3 @@
-File: ./build.gradle.kts
-
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-plugins {
-    alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.kotlin.android) apply false
-    id("com.google.devtools.ksp") version "1.9.0-1.0.13" apply false
-}
-================================================================================
-
-File: ./settings.gradle.kts
-
-pluginManagement {
-    repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "ContactApp"
-include(":app")
- 
-================================================================================
-
-File: ./app/build.gradle.kts
-
-plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    id("com.google.devtools.ksp")
-}
-
-android {
-    namespace = "com.example.contactapp"
-    compileSdk = 34
-
-    defaultConfig {
-        applicationId = "com.example.contactapp"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-}
-
-dependencies {
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-
-
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    annotationProcessor(libs.androidx.room.compiler)
-    ksp(libs.androidx.room.compiler)
-
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.coil.compose)
-}
-================================================================================
-
-File: ./app/build/intermediates/merged_manifest/debug/processDebugMainManifest/AndroidManifest.xml
-
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.contactapp"
-    android:versionCode="1"
-    android:versionName="1.0" >
-
-    <uses-sdk
-        android:minSdkVersion="24"
-        android:targetSdkVersion="34" />
-
-    <permission
-        android:name="com.example.contactapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-        android:protectionLevel="signature" />
-
-    <uses-permission android:name="com.example.contactapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-
-    <application
-        android:allowBackup="true"
-        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:debuggable="true"
-        android:extractNativeLibs="false"
-        android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:testOnly="true"
-        android:theme="@style/Theme.ContactApp" >
-        <activity
-            android:name="com.example.contactapp.MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.ContactApp" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <service
-            android:name="androidx.room.MultiInstanceInvalidationService"
-            android:directBootAware="true"
-            android:exported="false" />
-
-        <activity
-            android:name="androidx.activity.ComponentActivity"
-            android:exported="true" />
-
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="com.example.contactapp.androidx-startup"
-            android:exported="false" >
-            <meta-data
-                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-                android:value="androidx.startup" />
-            <meta-data
-                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-                android:value="androidx.startup" />
-            <meta-data
-                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-                android:value="androidx.startup" />
-        </provider>
-
-        <activity
-            android:name="androidx.compose.ui.tooling.PreviewActivity"
-            android:exported="true" />
-
-        <receiver
-            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-            android:directBootAware="false"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.DUMP" >
-            <intent-filter>
-                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-            </intent-filter>
-        </receiver>
-    </application>
-
-</manifest>
-================================================================================
-
-File: ./app/build/intermediates/merged_manifests/debug/processDebugManifest/AndroidManifest.xml
-
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.contactapp"
-    android:versionCode="1"
-    android:versionName="1.0" >
-
-    <uses-sdk
-        android:minSdkVersion="24"
-        android:targetSdkVersion="34" />
-
-    <permission
-        android:name="com.example.contactapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-        android:protectionLevel="signature" />
-
-    <uses-permission android:name="com.example.contactapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-
-    <application
-        android:allowBackup="true"
-        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:debuggable="true"
-        android:extractNativeLibs="false"
-        android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:testOnly="true"
-        android:theme="@style/Theme.ContactApp" >
-        <activity
-            android:name="com.example.contactapp.MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.ContactApp" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <service
-            android:name="androidx.room.MultiInstanceInvalidationService"
-            android:directBootAware="true"
-            android:exported="false" />
-
-        <activity
-            android:name="androidx.activity.ComponentActivity"
-            android:exported="true" />
-
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="com.example.contactapp.androidx-startup"
-            android:exported="false" >
-            <meta-data
-                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-                android:value="androidx.startup" />
-            <meta-data
-                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-                android:value="androidx.startup" />
-            <meta-data
-                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-                android:value="androidx.startup" />
-        </provider>
-
-        <activity
-            android:name="androidx.compose.ui.tooling.PreviewActivity"
-            android:exported="true" />
-
-        <receiver
-            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-            android:directBootAware="false"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.DUMP" >
-            <intent-filter>
-                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-            </intent-filter>
-        </receiver>
-    </application>
-
-</manifest>
-================================================================================
-
-File: ./app/build/intermediates/packaged_manifests/debug/processDebugManifestForPackage/AndroidManifest.xml
-
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.contactapp"
-    android:versionCode="1"
-    android:versionName="1.0" >
-
-    <uses-sdk
-        android:minSdkVersion="24"
-        android:targetSdkVersion="34" />
-
-    <permission
-        android:name="com.example.contactapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-        android:protectionLevel="signature" />
-
-    <uses-permission android:name="com.example.contactapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-
-    <application
-        android:allowBackup="true"
-        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:debuggable="true"
-        android:extractNativeLibs="false"
-        android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:testOnly="true"
-        android:theme="@style/Theme.ContactApp" >
-        <activity
-            android:name="com.example.contactapp.MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.ContactApp" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <service
-            android:name="androidx.room.MultiInstanceInvalidationService"
-            android:directBootAware="true"
-            android:exported="false" />
-
-        <activity
-            android:name="androidx.activity.ComponentActivity"
-            android:exported="true" />
-
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="com.example.contactapp.androidx-startup"
-            android:exported="false" >
-            <meta-data
-                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-                android:value="androidx.startup" />
-            <meta-data
-                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-                android:value="androidx.startup" />
-            <meta-data
-                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-                android:value="androidx.startup" />
-        </provider>
-
-        <activity
-            android:name="androidx.compose.ui.tooling.PreviewActivity"
-            android:exported="true" />
-
-        <receiver
-            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-            android:directBootAware="false"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.DUMP" >
-            <intent-filter>
-                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-            </intent-filter>
-        </receiver>
-    </application>
-
-</manifest>
-================================================================================
-
 File: ./app/src/androidTest/java/com/example/contactapp/ExampleInstrumentedTest.kt
 
 package com.example.contactapp
@@ -430,7 +24,6 @@ class ExampleInstrumentedTest {
         assertEquals("com.example.contactapp", appContext.packageName)
     }
 }
-================================================================================
 
 File: ./app/src/test/java/com/example/contactapp/ExampleUnitTest.kt
 
@@ -451,39 +44,6 @@ class ExampleUnitTest {
         assertEquals(4, 2 + 2)
     }
 }
-================================================================================
-
-File: ./app/src/main/AndroidManifest.xml
-
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <application
-        android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.ContactApp"
-        tools:targetApi="31">
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.ContactApp">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
-
-</manifest>
-================================================================================
 
 File: ./app/src/main/java/com/example/contactapp/MainActivity.kt
 
@@ -495,13 +55,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import com.example.contactapp.navigation.NavManager
 import com.example.contactapp.ui.theme.ContactAppTheme
-import com.example.contactapp.viewModel.ImagesViewModel
+import com.example.contactapp.viewModel.ContactViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
-        val viewModel: ImagesViewModel by viewModels()
+        val viewModel: ContactViewModel by viewModels()
         setContent {
             ContactAppTheme {
                 NavManager(viewModel)
@@ -509,9 +69,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-================================================================================
 
-File: ./app/src/main/java/com/example/contactapp/viewModel/ImagesViewModel.kt
+File: ./app/src/main/java/com/example/contactapp/viewModel/ContactViewModel.kt
 
 package com.example.contactapp.viewModel
 
@@ -519,58 +78,51 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
-import com.example.contactapp.model.ImagesModel
+import com.example.contactapp.model.ContactModel
 import com.example.contactapp.room.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.io.File
 
-class ImagesViewModel(application: Application): AndroidViewModel(application) {
+class ContactViewModel(application: Application): AndroidViewModel(application) {
 
     private val db = Room.databaseBuilder(
         application,
         AppDatabase::class.java,
-        "images_database"
+        "contact_database"
     ).build()
 
-    private val _imagesList = MutableStateFlow<List<ImagesModel>>(emptyList())
-    val imageList = _imagesList.asStateFlow()
+    private val _contactList = MutableStateFlow<List<ContactModel>>(emptyList())
+    val contactList = _contactList.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            db.imageDao().getImages().collect { item ->
-                _imagesList.value = item
+            db.contactDao().getContacts().collect { contacts ->
+                _contactList.value = contacts
             }
         }
     }
 
-    fun insertImage(item: ImagesModel) {
+    fun insertContact(contact: ContactModel) {
         viewModelScope.launch(Dispatchers.IO) {
-            db.imageDao().insertImage(item)
+            db.contactDao().insertContact(contact)
         }
     }
 
-    fun deleteImage(item: ImagesModel) {
+    fun updateContact(contact: ContactModel) {
         viewModelScope.launch(Dispatchers.IO) {
-            deletePhoto(item.ruta)
-            db.imageDao().deleteImage(item)
+            db.contactDao().updateContact(contact)
         }
     }
 
-    private fun deletePhoto(photoPath: String) {
-        val file = File(photoPath)
-        if (file.exists()) {
-            file.delete()
+    fun deleteContact(contact: ContactModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            db.contactDao().deleteContact(contact)
         }
     }
-
-
-
 }
 
-================================================================================
 
 File: ./app/src/main/java/com/example/contactapp/ui/theme/Color.kt
 
@@ -585,7 +137,6 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
-================================================================================
 
 File: ./app/src/main/java/com/example/contactapp/ui/theme/Theme.kt
 
@@ -647,7 +198,6 @@ fun ContactAppTheme(
         content = content
     )
 }
-================================================================================
 
 File: ./app/src/main/java/com/example/contactapp/ui/theme/Type.kt
 
@@ -685,7 +235,32 @@ val Typography = Typography(
     )
     */
 )
-================================================================================
+
+File: ./app/src/main/java/com/example/contactapp/repository/ContactRepository.kt
+
+package com.example.contactapp.repository
+
+import com.example.contactapp.model.ContactModel
+import com.example.contactapp.room.ContactDao
+import kotlinx.coroutines.flow.Flow
+
+class ContactRepository(private val contactDao: ContactDao) {
+
+    fun getAllContacts(): Flow<List<ContactModel>> = contactDao.getContacts()
+
+    suspend fun insertContact(contact: ContactModel) {
+        contactDao.insertContact(contact)
+    }
+
+    suspend fun updateContact(contact: ContactModel) {
+        contactDao.updateContact(contact)
+    }
+
+    suspend fun deleteContact(contact: ContactModel) {
+        contactDao.deleteContact(contact)
+    }
+}
+
 
 File: ./app/src/main/java/com/example/contactapp/room/AppDatabase.kt
 
@@ -693,41 +268,37 @@ package com.example.contactapp.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.contactapp.room.ImagesDao
-import com.example.contactapp.model.ImagesModel
+import com.example.contactapp.model.ContactModel
 
-@Database(entities = [ImagesModel::class], version = 1, exportSchema = false)
-abstract class AppDatabase: RoomDatabase() {
-    abstract fun imageDao(): ImagesDao
+@Database(entities = [ContactModel::class], version = 2, exportSchema = false)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun contactDao(): ContactDao
 }
-================================================================================
 
-File: ./app/src/main/java/com/example/contactapp/room/ImagesDao.kt
+File: ./app/src/main/java/com/example/contactapp/room/ContactDao.kt
 
 package com.example.contactapp.room
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import com.example.contactapp.model.ImagesModel
+import androidx.room.*
+import com.example.contactapp.model.ContactModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface ImagesDao {
+interface ContactDao {
 
-    @Query("SELECT * FROM Images")
-    fun getImages(): Flow<List<ImagesModel>>
+    @Query("SELECT * FROM contacts")
+    fun getContacts(): Flow<List<ContactModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertImage(item: ImagesModel)
+    suspend fun insertContact(contact: ContactModel)
 
     @Delete
-    suspend fun deleteImage(item: ImagesModel)
+    suspend fun deleteContact(contact: ContactModel)
 
+    @Update
+    suspend fun updateContact(contact: ContactModel)
 }
-================================================================================
+
 
 File: ./app/src/main/java/com/example/contactapp/navigation/NavManager.kt
 
@@ -737,196 +308,51 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.contactapp.view.AddPhotoView
 import com.example.contactapp.view.HomeView
-import com.example.contactapp.viewModel.ImagesViewModel
+import com.example.contactapp.view.AddContactView
+import com.example.contactapp.viewModel.ContactViewModel
 
 @Composable
-fun NavManager(viewModel: ImagesViewModel) {
+fun NavManager(viewModel: ContactViewModel) {
     val navController = rememberNavController()
     NavHost(navController, startDestination = "Home") {
         composable("Home") {
             HomeView(navController, viewModel)
         }
-        composable("AddPhotoView") {
-            AddPhotoView(viewModel)
+        composable("AddContactView") {
+            AddContactView(navController, viewModel)
         }
     }
 }
-================================================================================
 
-File: ./app/src/main/java/com/example/contactapp/model/ImagesModel.kt
+File: ./app/src/main/java/com/example/contactapp/model/ContactModel.kt
 
 package com.example.contactapp.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "Images")
-data class ImagesModel(
+@Entity(tableName = "contacts")
+data class ContactModel(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val ruta: String
+    val name: String,
+    val phone: String,
+    val email: String,
+    val profileImage: String,
+    val dateOfBirth: String
 )
 
-================================================================================
-
-File: ./app/src/main/java/com/example/contactapp/view/AddPhotoView.kt
-
-package com.example.contactapp.view
-
-import android.Manifest
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Environment
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
-import com.example.contactapp.R
-import com.example.contactapp.model.ImagesModel
-import com.example.contactapp.viewModel.ImagesViewModel
-import coil.compose.rememberAsyncImagePainter
-import java.io.File
-import java.io.FileOutputStream
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Objects
-
-@Composable
-fun AddPhotoView(viewModel: ImagesViewModel) {
-    val context = LocalContext.current
-    val file = context.createImageFile()
-    val uri = FileProvider.getUriForFile(
-        Objects.requireNonNull(context),
-        context.packageName + ".provider", file
-    )
-
-    var image by remember { mutableStateOf<Uri>(Uri.EMPTY) }
-    val imageDefault = R.drawable.photo
-    val permissionCheckResult = ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA)
-
-    val cameraLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicture()
-    ) { image = uri }
-
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) {
-        if (it != null) {
-            cameraLauncher.launch(uri)
-        } else {
-            Toast.makeText(context, "Permiso denegado", Toast.LENGTH_LONG).show()
-        }
-    }
-
-    val saveImageRoom = { imageUri: Uri ->
-        try {
-            val imagePath = context.saveImageToRoom(imageUri)
-            viewModel.insertImage(ImagesModel(ruta = imagePath))
-            Toast.makeText(context, "Guardado en room", Toast.LENGTH_LONG).show()
-
-        } catch (e:Exception) {
-            Toast.makeText(context, "Error al guardar la imagen en el room: ${e.message}", Toast.LENGTH_LONG).show()
-        }
-
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            modifier = Modifier
-                .clickable {
-                    if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                        cameraLauncher.launch(uri)
-                    } else {
-                        permissionLauncher.launch(Manifest.permission.CAMERA)
-                    }
-                }
-                .padding(16.dp, 8.dp),
-            painter = rememberAsyncImagePainter(if (image.path?.isNotEmpty() == true) image else imageDefault),
-            contentDescription = ""
-        )
-
-        Button(onClick = {
-            saveImageRoom(image)
-        }) {
-            Text(text = "Guardar foto")
-        }
-
-    }
-}
-
-
-@SuppressLint("SimpleDateFormat")
-@Composable
-fun Context.createImageFile(): File {
-    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-    val imageFileName = "JPEG_" + timeStamp + "_"
-    return File.createTempFile(
-        imageFileName,
-        ".jpg",
-        externalCacheDir
-    )
-}
-
-@SuppressLint("SimpleDateFormat")
-fun Context.saveImageToRoom(imageUri: Uri): String {
-    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-    val imageFileName = "JPGE_${timeStamp}.jpg"
-
-    val outputDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-    val outputFile = File(outputDir, imageFileName)
-
-    val inputStream = contentResolver.openInputStream(imageUri)
-    val outputStream = FileOutputStream(outputFile)
-
-    inputStream?.use { input ->
-        outputStream.use { output ->
-            input.copyTo(output)
-        }
-    }
-
-    return outputFile.absolutePath
-}
-================================================================================
 
 File: ./app/src/main/java/com/example/contactapp/view/HomeView.kt
 
 package com.example.contactapp.view
 
-import android.graphics.BitmapFactory
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -938,29 +364,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.contactapp.viewModel.ImagesViewModel
+import com.example.contactapp.viewModel.ContactViewModel
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeView(navController: NavController, viewModel: ImagesViewModel) {
+fun HomeView(navController: NavController, viewModel: ContactViewModel) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text( text = "Image Room") }
+                title = { Text(text = "Contactos") }
             )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                navController.navigate("AddPhotoView")
+                navController.navigate("AddContactView")
             }) {
                 Icon(Icons.Default.Add, contentDescription = "")
             }
@@ -971,39 +391,101 @@ fun HomeView(navController: NavController, viewModel: ImagesViewModel) {
 }
 
 @Composable
-fun ContentHomeView(pad: PaddingValues, viewModel: ImagesViewModel) {
-    val images by viewModel.imageList.collectAsState()
+fun ContentHomeView(pad: PaddingValues, viewModel: ContactViewModel) {
+    val contacts by viewModel.contactList.collectAsState()
 
     Column(
         modifier = Modifier
             .padding(pad)
     ) {
         LazyColumn {
-            items(images) { item ->
-                // Text(text = item.ruta )
-                PhotoView(item.ruta)
+            items(contacts) { contact ->
+                Text(text = "${contact.name} - ${contact.phone}")
             }
         }
     }
 }
 
+
+File: ./app/src/main/java/com/example/contactapp/view/AddContactView.kt
+
+package com.example.contactapp.view
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.contactapp.model.ContactModel
+import com.example.contactapp.viewModel.ContactViewModel
+
 @Composable
-fun PhotoView(imagePath: String) {
-    val bitmap = remember {
-        val file = File(imagePath)
-        BitmapFactory.decodeFile(file.absolutePath)
-    }
-    Image(
-        bitmap = bitmap.asImageBitmap(),
-        contentDescription = "",
+fun AddContactView(navController: NavController, viewModel: ContactViewModel) {
+    var name by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var profileImage by remember { mutableStateOf("") }
+    var dateOfBirth by remember { mutableStateOf("") }
+
+    Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.7f)
-            .padding(15.dp)
-            .shadow(10.dp, shape = RoundedCornerShape(16.dp))
-            .clip(RoundedCornerShape(16.dp)),
-        contentScale = ContentScale.Fit
-    )
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        OutlinedTextField(
+            value = name,
+            onValueChange = { name = it },
+            label = { Text(text = "Nombre") },
+            modifier = Modifier.padding(8.dp)
+        )
+        OutlinedTextField(
+            value = phone,
+            onValueChange = { phone = it },
+            label = { Text(text = "Teléfono") },
+            modifier = Modifier.padding(8.dp)
+        )
+        OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text(text = "Correo") },
+            modifier = Modifier.padding(8.dp)
+        )
+        OutlinedTextField(
+            value = profileImage,
+            onValueChange = { profileImage = it },
+            label = { Text(text = "Imagen de Perfil (Ruta)") },
+            modifier = Modifier.padding(8.dp)
+        )
+        OutlinedTextField(
+            value = dateOfBirth,
+            onValueChange = { dateOfBirth = it },
+            label = { Text(text = "Fecha de Nacimiento") },
+            modifier = Modifier.padding(8.dp)
+        )
+        Button(
+            onClick = {
+                val newContact = ContactModel(
+                    name = name,
+                    phone = phone,
+                    email = email,
+                    profileImage = profileImage,
+                    dateOfBirth = dateOfBirth
+                )
+                viewModel.insertContact(newContact)
+                navController.popBackStack() // Volver a la vista anterior
+            },
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Text(text = "Guardar Contacto")
+        }
+    }
 }
-================================================================================
+
 
