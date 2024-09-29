@@ -4,53 +4,47 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
-import com.example.contactapp.model.ImagesModel
+import com.example.contactapp.model.ContactModel
 import com.example.contactapp.room.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.io.File
 
-class ImagesViewModel(application: Application): AndroidViewModel(application) {
+class ContactViewModel(application: Application): AndroidViewModel(application) {
 
     private val db = Room.databaseBuilder(
         application,
         AppDatabase::class.java,
-        "images_database"
+        "contact_database"
     ).build()
 
-    private val _imagesList = MutableStateFlow<List<ImagesModel>>(emptyList())
-    val imageList = _imagesList.asStateFlow()
+    private val _contactList = MutableStateFlow<List<ContactModel>>(emptyList())
+    val contactList = _contactList.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            db.imageDao().getImages().collect { item ->
-                _imagesList.value = item
+            db.contactDao().getContacts().collect { contacts ->
+                _contactList.value = contacts
             }
         }
     }
 
-    fun insertImage(item: ImagesModel) {
+    fun insertContact(contact: ContactModel) {
         viewModelScope.launch(Dispatchers.IO) {
-            db.imageDao().insertImage(item)
+            db.contactDao().insertContact(contact)
         }
     }
 
-    fun deleteImage(item: ImagesModel) {
+    fun updateContact(contact: ContactModel) {
         viewModelScope.launch(Dispatchers.IO) {
-            deletePhoto(item.ruta)
-            db.imageDao().deleteImage(item)
+            db.contactDao().updateContact(contact)
         }
     }
 
-    private fun deletePhoto(photoPath: String) {
-        val file = File(photoPath)
-        if (file.exists()) {
-            file.delete()
+    fun deleteContact(contact: ContactModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            db.contactDao().deleteContact(contact)
         }
     }
-
-
-
 }

@@ -4,19 +4,19 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.contactapp.view.AddPhotoView
 import com.example.contactapp.view.HomeView
-import com.example.contactapp.viewModel.ImagesViewModel
+import com.example.contactapp.view.AddContactView
+import com.example.contactapp.viewModel.ContactViewModel
 
 @Composable
-fun NavManager(viewModel: ImagesViewModel) {
+fun NavManager(viewModel: ContactViewModel) {
     val navController = rememberNavController()
     NavHost(navController, startDestination = "Home") {
         composable("Home") {
             HomeView(navController, viewModel)
         }
-        composable("AddPhotoView") {
-            AddPhotoView(viewModel)
+        composable("AddContactView") {
+            AddContactView(navController, viewModel)
         }
     }
 }
